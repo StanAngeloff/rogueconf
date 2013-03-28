@@ -1,0 +1,7 @@
+{
+  "name": "rogueconf-distributed-computing",
+  "version": "1.0.0",
+  "dependencies": {
+    "reveal.js": "d2cf21028eac378bdefe145fefa6d49841ecea1c"
+  }
+}
