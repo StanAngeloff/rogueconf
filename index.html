@@ -8,9 +8,33 @@
 <meta name=author content="Стан Ангелов">
 
 <link rel=stylesheet href=components/reveal.js/css/reveal.css>
-<link rel=stylesheet href=components/reveal.js/css/theme/default.css>
+<link rel=stylesheet href=components/reveal.js/css/theme/simple.css>
 
 <link rel=stylesheet href=components/reveal.js/lib/css/zenburn.css>
+
+<link rel=stylesheet href="http://fonts.googleapis.com/css?family=PT+Sans:400,700,400italic,700italic&subset=latin,cyrillic">
+
+<style>
+.reveal,
+.reveal h1,
+.reveal h2,
+.reveal h3,
+.reveal h4,
+.reveal h5,
+.reveal h6 { font-family: 'PT Sans'; }
+
+.reveal h1 { font-size: 2.0em; text-shadow: none; }
+.reveal h2 { font-size: 1.8em; }
+.reveal h3 { font-size: 1.6em; }
+.reveal h4 { font-size: 1.4em; }
+.reveal h5 { font-size: 1.2em; }
+
+.reveal img.inline { background: transparent; border: 0; box-shadow: none; margin: 0; vertical-align: middle; }
+
+.reveal strike, .reveal strike * { text-decoration: line-through; }
+
+.reveal .hidden { visibility: hidden; }
+</style>
 
 </head>
 <body>
@@ -19,39 +43,273 @@
 <div class=slides>
 
 <section>
-  <h1>Flume</h1>
-  <h2>Distributed service for collecting, aggregating, and moving logs</h2>
-  <!-- XXX: Not added yet. -->
+  <h1>Apache Foundation, Twitter and (easy) distributed computing.</h1>
+  <p>(объркващо заглавие на английски)</p>
+  <p><small>* всички правописни грешки са дело на автора</small></p>
 </section>
 
 <section>
-  <h1>Hadoop</h1>
-  <h2>Distributed computing</h2>
-  <!-- XXX: Not added yet. -->
+  <h1>Кой?</h1>
+  <h2>Стан{,имир} Ангело{в,ff}</h2>
+  <br>
+  <ul>
+    <li>Пише код.</li>
+    <li>Обича бяло вино (без мярка).</li>
+    <li>Не търпи глупави хора.</li>
+  </ul>
 </section>
 
 <section>
-  <h1>Kafka</h1>
-  <h2>Distributed publish-subscribe messaging&nbsp;system</h2>
-  <!-- XXX: Not added yet. -->
+  <h1>Hello!</h1>
 </section>
 
 <section>
-  <h1>Sqoop</h1>
-  <h2>Big data &lt;&mdash;&gt; SQL</h2>
-  <!-- XXX: Not added yet. -->
+  <p align=center><img class=inline src=http://www.apache.org/images/feather-small.gif></p>
+  <h1>The Apache Software&nbsp;Foundation</h1>
+  <p>Community-led development since 1999.</p>
+  <ul>
+    <li><a href=http://projects.apache.org/indexes/alpha.html>Огромен списък с проекти</a></li>
+  </ul>
 </section>
 
 <section>
-  <h1>Storm</h1>
-  <h2>Distributed real-time computation</h2>
-  <!-- XXX: Not added yet. -->
+  <section>
+    <p align=center><img class=inline src=http://hadoop.apache.org/images/hadoop-logo.jpg></p>
+    <h1>Hadoop</h1>
+    <p>Distributed computing</p>
+  </section>
+  <section>
+    <h1>Hadoop: Ще е то?</h1>
+    <p class=fragment>Колекция от няколко проекта:</p>
+    <ul class=fragment>
+      <li>Hadoop Distributed File System (HDFS)</li>
+      <li>Resource Management (YARN)</li>
+      <li>Hadoop MapReduce</li>
+    </ul>
+  </section>
+  <section>
+    <h1>Hadoop: Не само Java</h1>
+    <p>Map/Reduce във всеки език, вкл. Bash, чрез Hadoop&nbsp;Streaming.</p>
+  </section>
+  <section>
+    <h1>Hadoop Streaming <a href=http://www.josephmisiti.com/using-hadoop-map-reduce-for-word-counting-usi>пример</a></h1>
+    <p>Map:</p>
+    <pre><code>import sys
+
+for line in sys.stdin:
+  line = line.strip()
+  words = line.split()
+  for word in words:
+    print '%s\t%s' % (word, 1)</code></pre>
+  </section>
+  <section>
+    <h1>Hadoop Streaming <a href=http://www.josephmisiti.com/using-hadoop-map-reduce-for-word-counting-usi>пример</a></h1>
+    <p>Reduce:</p>
+    <pre><code>import sys
+
+current_word = None
+current_count = 0
+word = None
+
+for line in sys.stdin:
+  line = line.strip()
+  word, count = line.split('\t', 1)
+  if current_word == word:
+    current_count += int(count)
+  else:
+    if current_word:
+      print '%s\t%s' % (current_word, current_count)
+    current_count = count
+    current_word = word
+
+if current_word == word:
+  print '%s\t%s' % (current_word, current_count) </code></pre>
+  </section>
+  <section>
+    <h1>Hadoop: Топ 3 от добрите&nbsp;черти</h1>
+    <ul>
+      <li>Сравнително лесен.</li>
+      <li>Огромна база от потребители.</li>
+      <li>Scaling horizontally.</li>
+    </ul>
+  </section>
+  <section>
+    <h1>Hadoop: Другите неща&hellip;</h1>
+    <ul>
+      <li>Memory monster</li>
+      <li>Много навързани системи</li>
+      <li>Скрити изненади</li>
+    </ul>
+  </section>
 </section>
 
 <section>
-  <h1>ZooKeeper</h1>
-  <h2>Distributed coordination</h2>
-  <!-- XXX: Not added yet. -->
+  <section>
+    <p align=center><img class=inline src=http://flume.apache.org/_static/flume-logo.png></p>
+    <h1>Flume</h1>
+    <p>Distributed service for collecting, aggregating, and&nbsp;moving&nbsp;logs</p>
+  </section>
+  <section>
+    <h1>Flume: Що е то?</h1>
+    <ul>
+      <li class=fragment>distributed,</li>
+      <li class=fragment>reliable,</li>
+      <li class=fragment>based on streaming data flows,</li>
+      <li class=fragment>fault tolerant,</li>
+      <li class=fragment>tunable reliability mechanisms,</li>
+      <li class=fragment>failover and recovery mechanisms.</li>
+    </ul>
+    <p class=hidden><strong>B.S.</strong></p>
+  </section>
+  <section>
+    <h1>Flume: Що е то?</h1>
+    <strike>
+      <ul>
+        <li>distributed,</li>
+        <li>reliable,</li>
+        <li>based on streaming data flows,</li>
+        <li>fault tolerant,</li>
+        <li>tunable reliability mechanisms,</li>
+        <li>failover and recovery mechanisms.</li>
+      </ul>
+    </strike>
+    <p><strong>B.S.</strong></p>
+  </section>
+  <section>
+    <h1>Flume: Що е то (v2)?</h1>
+    <p class=fragment>
+      Бърз, лесен и надежден начин много редове текст да &ldquo;прехвърчат&rdquo; от много различни системи на едно централно&nbsp;място&hellip;<br>
+      <img class=inline src=http://flume.apache.org/_images/UserGuide_image00.png>
+    </p>
+  </section>
+  <section>
+    <h1>Flume: Защо и кога?</h1>
+    <ul>
+      <li class=fragment>Агрегация на данни от много източници</li>
+      <li class=fragment>Fan out, входна точна за данни, които трябва да достигнат до много системи</li>
+      <li class=fragment>Най-вече когато се работи с Hadoop/HDFS</li>
+    </ul>
+  </section>
+  <section>
+    <h1>Flume: Добрите&nbsp;черти</h1>
+    <ul>
+      <li class=fragment>Поддържа различни източници - syslog, HTTP/JSON, прост netcat сървър и т.н.</li>
+      <li class=fragment>Интегрира се с HDFS</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <section>
+    <h1>Kafka</h1>
+    <p>Distributed publish-subscribe messaging&nbsp;system</p>
+  </section>
+  <section>
+    <h1>Kafka: Що е то?</h1>
+    <p>Бързо queue/messaging с поддръжка за ТБ от данни.</p>
+  </section>
+  <section>
+    <h1>Kafka: Кога?</h1>
+    <ul>
+      <li>Най-вече при работа с Hadoop</li>
+      <li>Като входна точка за друга система, която не може да приема голям обем от данни</li>
+      <li>Pub-Sub</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <section>
+    <p align=center><img class=inline src=http://sqoop.apache.org/images/sqoop-logo.png></p>
+    <h1>Sqoop</h1>
+    <p>Big data &lt;&mdash;&gt; SQL</p>
+  </section>
+  <section>
+    <h1>Sqoop: Що е то?</h1>
+    <p>Копира/мести данни от HDFS в SQL и обратно.</p>
+  </section>
+  <section>
+    <h1>Sqoop: Пример</h1>
+  </section>
+  <section>
+    <h1>Sqoop: Другите неща&hellip;</h1>
+    <ul>
+      <li>Доста лимитиран откъм възможности и входен формат на данните</li>
+      <li>Рано или късно ще ви се наложи да го компилирате с добавен feature - отнема часове!</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <section>
+    <h1>Storm</h1>
+    <p>Distributed real-time computation</p>
+  </section>
+  <section>
+    <h1>Storm: Що е то?</h1>
+    <p>Анализ на данни в real-time&hellip; с гаранция, че няма да се получават загуби.</p>
+  </section>
+  <section>
+    <h1>Storm: Кога и защо?</h1>
+    <ul>
+      <li>Generic и language-agnostic, покрива много use-cases</li>
+      <li>Когато данните за дадено приложение трябва да са налични ASAP</li>
+    </ul>
+  </section>
+  <section>
+    <h1>Storm: Топ 3 от добрите&nbsp;черти</h1>
+    <ul>
+      <li>Сравнително лесен, според авторите <cite>&ldquo;Storm clusters just work&rdquo;</cite>.</li>
+      <li>Гарантира, че съобщенията са обработени на 100% без загуби</li>
+      <li>Лесен за scale, повече машини &gt; по-добра производителност</li>
+    </ul>
+  </section>
+  <section>
+    <h1>Storm: Другите неща&hellip;</h1>
+    <ul>
+      <li>Не винаги &ldquo;just works&rdquo;</li>
+      <li>Отново навързани системи</li>
+      <li>Прекалено много термини специфични за проекта (топологии, streams, bolts, etc.)</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <section>
+    <p align=center><img class=inline src=http://zookeeper.apache.org/images/zookeeper_small.gif></p>
+    <h1>ZooKeeper</h1>
+    <p>Distributed coordination</p>
+  </section>
+  <section>
+    <h1>ZooKeeper: Що е то?</h1>
+    <p>Координация. That is all.</p>
+  </section>
+  <section>
+    <h1>ZooKeeper: Пример</h1>
+    <p>Как се генерира поредно ID в Hadoop MapReduce job в клъстър от 20 машини?</p>
+  </section>
+  <section>
+    <h1>ZooKeeper: Добрите&nbsp;черти</h1>
+    <ul>
+      <li>Изключително лесен за поддръжка, практически липсваща конфигурация.</li>
+      <li>Йерархичен модел да данните <img class=inline src=http://zookeeper.apache.org/doc/r3.4.5/images/zknamespace.jpg></li>
+      <li>Бърз, но при нужда scales easy - просто добавете още машини в ensemble-а.</li>
+    </ul>
+  </section>
+</section>
+
+<section>
+  <h1>Алтернативи</h1>
+</section>
+
+<section>
+  <section>
+    <h1>Ами сега?</h1>
+  </section>
+  <section>
+    <p align=center><img class=inline src=http://www.reactionface.info/sites/default/files/imagecache/Node_Page/images/1287666826226.png></p>
+    <p>Научете Java, ще ви трябва един ден.</p>
+  </section>
 </section>
 
 </div>
@@ -66,6 +324,7 @@ Reveal.initialize({
   progress: true,
   history: true,
   center: true,
+  transition: 'none',
   dependencies: [
     {
       src: 'components/reveal.js/plugin/highlight/highlight.js',
